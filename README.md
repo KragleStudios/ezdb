@@ -52,4 +52,4 @@ local query = database:Select("users")
 query:Execute()
 ```
 
-Check out the [wrapper's source](https://github.com/SomeSortOfDuck/ezdb-wrapper/blob/master/wrapper.lua) for all the things you can do with it.
+All input using the wrapper is automatically escaped. Check out the [wrapper's source](https://github.com/SomeSortOfDuck/ezdb-wrapper/blob/master/wrapper.lua) for all the things you can do with it.
