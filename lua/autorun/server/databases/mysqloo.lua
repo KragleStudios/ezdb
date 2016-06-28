@@ -1,7 +1,7 @@
 local Database = {}
 
 function Database:Connect(config) 
-	myqsqloo = mysqloo or require("mysqloo")
+	require("mysqloo")
 
 	config = config or self.config
 

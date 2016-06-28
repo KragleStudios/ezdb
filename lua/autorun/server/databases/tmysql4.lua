@@ -1,7 +1,7 @@
 local Database = {}
 
 function Database:Connect(config) 
-	tmysql = tmysql or require("tmysql4")
+	require("tmysql4")
 
 	config = config or self.config
 

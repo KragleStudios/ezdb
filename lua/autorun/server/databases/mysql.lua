@@ -1,7 +1,7 @@
 local Database = {}
 
 function Database:Connect(config) 
-	mysql = mysql or require("mysql")
+	require("mysql")
 
 	config = config or self.config
 
