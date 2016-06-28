@@ -41,6 +41,9 @@ function Database:Query(query, onSuccess, onError)
 
 	query.onSuccess = function(query, result)
 		if (onSuccess) then
+			self.m_lastID = query:lastInsert()
+			self.m_affectedRows = query:affectedRows()
+
 			onSuccess(result or {})
 		end
 	end
@@ -69,11 +72,11 @@ function Database:LastError()
 end
 
 function Database:LastID()
-	return self.connection:lastInsert() or 0
+	return self.m_lastID or 0
 end
 
 function Database:AffectedRows()
-	return self.connection:affectedRows() or 0
+	return self.m_affectedRows or 0
 end
 
 return Database
