@@ -1,0 +1,3 @@
+[submodule "lua/ezdb-wrapper"]
+	path = lua/ezdb-wrapper
+	url = https://github.com/SomeSortOfDuck/ezdb-wrapper
