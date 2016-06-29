@@ -52,4 +52,10 @@ local query = database:Select("users")
 query:Execute()
 ```
 
+The wrapper can also be used in-line, which allows for short and expressive queries to be executed in a single line. The following example would set every user's `money` to 0 if they have $5,000 or more.
+
+```lua
+database:Update("users"):Update("money", 0):WhereGTE("money", 5000):Execute()
+```
+
 All input using the wrapper is automatically escaped. Check out the [wrapper's source](https://github.com/SomeSortOfDuck/ezdb-wrapper/blob/master/wrapper.lua) for all the things you can do with it.
