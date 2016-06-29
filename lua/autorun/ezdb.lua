@@ -1,5 +1,5 @@
 ezdb = {}
-ezdb.Wrapper = include("ezdb-wrapper/wrapper.lua")
+ezdb.Wrapper = include("ezdb-wrapper/wrapper.lua"); AddCSLuaFile("ezdb-wrapper/wrapper.lua")
 
 function ezdb.Create(config)
 	local database = {__index = ezdb[config.module or "sqlite"], config = config}
@@ -12,8 +12,12 @@ function ezdb.Error(err, query)
 	ErrorNoHalt(("SQL Error: %s\n%s\n"):format(err, query))
 end
 
-for k, v in pairs(file.Find("autorun/server/databases/*", "LUA")) do
+for k, v in pairs(file.Find("autorun/databases/*", "LUA")) do
 	local database, name = include("databases/"..v)
+
+	if (SERVER) then
+		AddCSLuaFile("databases/"..v)
+	end
 
 	ezdb[name or v:StripExtension()] = table.Merge(database, ezdb.Wrapper)
 end

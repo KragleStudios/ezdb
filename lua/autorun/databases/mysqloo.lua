@@ -1,14 +1,12 @@
 local Database = {}
 
 function Database:Connect(config) 
-	require("mysql")
+	require("mysqloo")
 
 	config = config or self.config
 
-	if (mysql) then
-		local err
-
-		self.connection = mysql.Connect(
+	if (mysqloo) then
+		self.connection = mysqloo.connect(
 			config.host or "localhost", 
 			config.username, 
 			config.password, 
@@ -17,7 +15,7 @@ function Database:Connect(config)
 			config.socket or ""
 		)
 
-		self.connection.OnConnected = function(connection)
+		self.connection.onConnected = function(connection)
 			if (self.OnConnected) then
 				self:OnConnected()
 			elseif (self.OnConnectionSuccess) then
@@ -25,52 +23,50 @@ function Database:Connect(config)
 			end
 		end
 
-		self.connection.OnConnectionFailed = function(connection, err)
+		self.connection.onConnectionFailed = function(connection, err)
 			if (self.OnConnectionFailed) then
 				self:OnConnectionFailed(err)
 			end
 		end
 
 		self.config = config
-		self.connection:Connect()
+		self.connection:connect()
+	else
+		error("mysqloo module not loaded", 2)
 	end
 
 	return self
 end
 
-function Database:Disconnect()
-	return self.connection:Disconnect()
-end
-
 function Database:Query(query, onSuccess, onError)
-	local queryObj = self.connection:Query(query)
+	query = self.connection:query(query)
 
-	queryObj.OnCompleted = function(queryObj, result)
-		result = result[1]
+	query.onSuccess = function(query, result)
+		if (onSuccess) then
+			self.m_lastID = query:lastInsert()
+			self.m_affectedRows = query:affectedRows()
 
-		if (result.Success) then
-			self.m_lastID = result.LastID
-			self.m_affectedRows = result.Affected
-
-			if (onSuccess) then
-				onSuccess(result.Data)
-			end
-		elseif (onError) then
-			self.m_lastError = result.Error
-
-			onError(result.Error, query)
+			onSuccess(result or {})
 		end
 	end
 
-	queryObj:Start()
+	query.onError = function(query, err, sql)
+		self.m_lastError = err
+
+		if (onError) then
+			onError(err, sql)
+		end
+	end
+
+	query:start()
 end
 
 function Database:IsConnected()
-	return self.connection:Status() == DATABASE_CONNECTED
+	return self.connection != nil and self.connection:status() == mysqloo.DATABASE_CONNECTED
 end
 
 function Database:Escape(input)
-	return self.connection:Escape(input)
+	return self.connection:escape(input)
 end
 
 function Database:LastError()

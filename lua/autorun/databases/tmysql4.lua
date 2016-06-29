@@ -28,6 +28,8 @@ function Database:Connect(config)
 		end
 
 		self.config = config
+	else
+		error("tmysql4 module not loaded", 2)
 	end
 
 	return self
