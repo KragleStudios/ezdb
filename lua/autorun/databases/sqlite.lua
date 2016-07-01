@@ -30,7 +30,7 @@ function Database:IsConnected()
 end
 
 function Database:Escape(input) 
-	return sql.SQLStr(input) 
+	return (sql.SQLStr(input, true)):gsub('"', '""')
 end
 
 function Database:LastError()
