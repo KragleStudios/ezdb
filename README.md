@@ -13,7 +13,7 @@ Replace the `module` string with any of the modules above.
 
 ```lua
 hook.Add("InitPostEntity", "LoadDatabase", function()	
-	local database = ezdb.Create(
+	local database = ezdb.create(
 	{
 		host 		= 	"localhost",
 		username 	= 	"root",
@@ -39,7 +39,7 @@ You can execute raw queries or build them with the provided wrapper. For example
 ```lua
 database:Query("SELECT * FROM users WHERE rank = 'user' LIMIT 1;", function(result)
 	PrintTable(result)
-end, ezdb.Error)
+end, ezdb.error)
 ```
 
 ```lua
@@ -58,4 +58,4 @@ The wrapper can also be used in-line, which allows for short and expressive quer
 database:Update("users"):Update("money", 0):WhereGTE("money", 5000):Execute()
 ```
 
-All input using the wrapper is automatically escaped. Check out the [wrapper's source](https://github.com/SomeSortOfDuck/ezdb-wrapper/blob/master/wrapper.lua) for all the things you can do with it.
+All input using the wrapper is automatically escaped.
