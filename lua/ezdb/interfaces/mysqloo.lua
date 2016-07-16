@@ -1,44 +1,44 @@
 local Database = {}
 
-function Database:Connect(config) 
-	require("mysqloo")
+function Database:connect(config) 
+	require('mysqloo')
 
 	config = config or self.config
 
 	if (mysqloo) then
 		self.connection = mysqloo.connect(
-			config.host or "localhost", 
+			config.host or 'localhost', 
 			config.username, 
 			config.password, 
 			config.database, 
 			config.port or 3306, 
-			config.socket or ""
+			config.socket or ''
 		)
 
 		self.connection.onConnected = function(connection)
-			if (self.OnConnected) then
-				self:OnConnected()
-			elseif (self.OnConnectionSuccess) then
-				self:OnConnectionSuccess()
+			if (self.onConnected) then
+				self:onConnected()
+			elseif (self.onConnectionSuccess) then
+				self:onConnectionSuccess()
 			end
 		end
 
 		self.connection.onConnectionFailed = function(connection, err)
-			if (self.OnConnectionFailed) then
-				self:OnConnectionFailed(err)
+			if (self.onConnectionFailed) then
+				self:onConnectionFailed(err)
 			end
 		end
 
 		self.config = config
 		self.connection:connect()
 	else
-		error("mysqloo module not loaded", 2)
+		error('mysqloo module not loaded', 2)
 	end
 
 	return self
 end
 
-function Database:Query(query, onSuccess, onError)
+function Database:query(query, onSuccess, onError)
 	query = self.connection:query(query)
 
 	query.onSuccess = function(query, result)
@@ -61,23 +61,23 @@ function Database:Query(query, onSuccess, onError)
 	query:start()
 end
 
-function Database:IsConnected()
+function Database:isConnected()
 	return self.connection != nil and self.connection:status() == mysqloo.DATABASE_CONNECTED
 end
 
-function Database:Escape(input)
+function Database:escape(input)
 	return self.connection:escape(input)
 end
 
-function Database:LastError()
-	return self.m_lastError or ""
+function Database:lastError()
+	return self.m_lastError or ''
 end
 
-function Database:LastID()
+function Database:lastId()
 	return self.m_lastID or 0
 end
 
-function Database:AffectedRows()
+function Database:affectedRows()
 	return self.m_affectedRows or 0
 end
 

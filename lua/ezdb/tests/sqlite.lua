@@ -5,28 +5,28 @@ local database = ezdb.create(
 	module      =   'sqlite'
 })
 
-function database:OnConnected()
-	self:Create('ezdb_test')
-		:Create('name', 'VARCHAR(255) NOT NULL')
-		:Create('money', 'INTEGER NOT NULL')
-	:Execute(function()
+function database:onConnected()
+	self:create('ezdb_test')
+		:create('name', 'VARCHAR(255) NOT NULL')
+		:create('money', 'INTEGER NOT NULL')
+	:execute(function()
 		print('created ezdb_test table')
 
-		self:Insert('ezdb_test')
-			:Insert('name', 'John Doe')
-			:Insert('money', 5000)
-		:Execute(function()
+		self:insert('ezdb_test')
+			:insert('name', 'John Doe')
+			:insert('money', 5000)
+		:execute(function()
 			print('inserted row')
 
-			self:Update('ezdb_test'):Update('money', 200):WhereGTE('money', 5000):Execute(function()
-				print('updated money, '..tostring(self:AffectedRows())..' row affected')
+			self:update('ezdb_test'):update('money', 200):whereGTE('money', 5000):execute(function()
+				print('updated money, '..tostring(self:affectedRows())..' row affected')
 
-				self:Select('ezdb_test'):Where('money', 200):Execute(function(result)
+				self:select('ezdb_test'):where('money', 200):execute(function(result)
 					print('got result')
 
 					PrintTable(result)
 
-					self:Delete('ezdb_test'):Execute(function()
+					self:delete('ezdb_test'):execute(function()
 						print('deleted ezdb_test table')
 					end)
 				end)
@@ -35,4 +35,4 @@ function database:OnConnected()
 	end)
 end
 
-database:Connect()
+database:connect()

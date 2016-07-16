@@ -1,7 +1,7 @@
 local Database = {}
 
-function Database:Connect(config) 
-	require("tmysql4")
+function Database:connect(config) 
+	require('tmysql4')
 
 	config = config or self.config
 
@@ -9,37 +9,37 @@ function Database:Connect(config)
 		local err
 
 		self.connection, err = tmysql.initialize(
-			config.host or "localhost", 
+			config.host or 'localhost', 
 			config.username, 
 			config.password, 
 			config.database, 
 			config.port or 3306, 
-			config.socket or ""
+			config.socket or ''
 		)
 
 		if (self.connection) then
-			if (self.OnConnected) then
-				self:OnConnected()
-			elseif (self.OnConnectionSuccess) then
-				self:OnConnectionSuccess()
+			if (self.onConnected) then
+				self:onConnected()
+			elseif (self.onConnectionSuccess) then
+				self:onConnectionSuccess()
 			end
-		elseif (self.OnConnectionFailed) then
-			self:OnConnectionFailed(err)
+		elseif (self.onConnectionFailed) then
+			self:onConnectionFailed(err)
 		end
 
 		self.config = config
 	else
-		error("tmysql4 module not loaded", 2)
+		error('tmysql4 module not loaded', 2)
 	end
 
 	return self
 end
 
-function Database:Disconnect()
+function Database:disconnect()
 	return self.connection:Disconnect()
 end
 
-function Database:Query(query, onSuccess, onError)
+function Database:query(query, onSuccess, onError)
 	self.connection:Query(query, function(result)
 		result = result[1]
 
@@ -58,23 +58,23 @@ function Database:Query(query, onSuccess, onError)
 	end)
 end
 
-function Database:IsConnected()
+function Database:isConnected()
 	return self.connection != nil and self.connection != false
 end
 
-function Database:Escape(input)
+function Database:escape(input)
 	return self.connection:Escape(input)
 end
 
-function Database:LastError()
-	return self.m_lastError or ""
+function Database:lastError()
+	return self.m_lastError or ''
 end
 
-function Database:LastID()
+function Database:lastId()
 	return self.m_lastID or 0
 end
 
-function Database:AffectedRows()
+function Database:affectedRows()
 	return self.m_affectedRows or 0
 end
 

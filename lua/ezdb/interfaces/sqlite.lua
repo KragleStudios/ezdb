@@ -1,16 +1,16 @@
 local Database = {}
 
-function Database:Connect()
-	if (self.OnConnected) then
-		self:OnConnected()
-	elseif (self.OnConnectionSuccess) then
-		self:OnConnectionSuccess()
+function Database:connect()
+	if (self.onConnected) then
+		self:onConnected()
+	elseif (self.onConnectionSuccess) then
+		self:onConnectionSuccess()
 	end
 
 	return self
 end
 
-function Database:Query(query, onSuccess, onError)
+function Database:query(query, onSuccess, onError)
 	local result = sql.Query(query)
 
 	if (result != false) then
@@ -25,23 +25,23 @@ function Database:Query(query, onSuccess, onError)
 	end
 end
 
-function Database:IsConnected() 
+function Database:isConnected() 
 	return true 
 end
 
-function Database:Escape(input) 
+function Database:escape(input) 
 	return (sql.SQLStr(input, true)):gsub('"', '""')
 end
 
-function Database:LastError()
+function Database:lastError()
 	return sql.LastError() or ""
 end
 
-function Database:LastID()
+function Database:lastId()
 	return self.m_lastID or 0
 end
 
-function Database:AffectedRows()
+function Database:affectedRows()
 	return self.m_affectedRows or 0
 end
 
